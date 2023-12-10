@@ -1,0 +1,13 @@
+package pages
+
+import (
+	"spendings/internal/domain"
+	"spendings/internal/templates/partials"
+	"spendings/internal/templates/shared"
+)
+
+templ TransactionPage(transaction *domain.Transaction) {
+	@shared.Page("Transaction") {
+		@partials.RenderTransaction(transaction)
+	}
+}

@@ -1,0 +1,69 @@
+package partials
+
+
+templ SearchTransactions(term string, month int, year int) {
+    <form method="GET" action={ templ.SafeURL("/transactions") } class="flex justify-between [&:has(+ul:empty)]:hidden">
+        <div class="flex items-center gap-4">
+            <!-- Search Input -->
+            <input
+                id="search"
+                name="search"
+                value={ term }
+                type="text"
+                placeholder="Search by description or category..."
+                hx-get={ "/transactions" }
+                hx-target={ "#transactions" }
+                hx-trigger="keyup changed, search"
+                hx-replace="innerHTML"
+                class="block w-full border-gray-300 rounded-md shadow-sm text-black"
+            />
+        </div>
+
+        <div class="flex items-center gap-4">
+            <!-- Month Selector -->
+            <div class="relative">
+                <select
+                    id="month-selector"
+                    name="month"
+                    hx-get={ "/transactions" }
+                    hx-target={ "#transactions" }
+                    hx-trigger="change"
+                    class="appearance-none block w-full bg-gray-800 text-white border border-gray-600 rounded-md py-2 pl-3 pr-8 leading-tight focus:outline-none focus:bg-gray-700"
+                >
+                    <option value="">Month</option>
+                    <option value="1" selected?={ month == 1 }>January</option>
+                    <option value="2" selected?={ month == 2 }>February</option>
+                    <option value="3" selected?={ month == 3 }>March</option>
+                    <option value="4" selected?={ month == 4 }>April</option>
+                    <option value="5" selected?={ month == 5 }>May</option>
+                    <option value="6" selected?={ month == 6 }>June</option>
+                    <option value="7" selected?={ month == 7 }>July</option>
+                    <option value="8" selected?={ month == 8 }>August</option>
+                    <option value="9" selected?={ month == 9 }>September</option>
+                    <option value="10" selected?={ month == 10 }>October</option>
+                    <option value="11" selected?={ month == 11 }>November</option>
+                    <option value="12" selected?={ month == 12 }>December</option>
+                </select>
+            </div>
+
+            <!-- Year Selector -->
+            <div class="relative">
+                <select
+                    id="year-selector"
+                    name="year"
+                    hx-get={ "/transactions" }
+                    hx-target={ "#transactions" }
+                    hx-trigger="change"
+                    class="appearance-none block w-full bg-gray-800 text-white border border-gray-600 rounded-md py-2 pl-3 pr-8 leading-tight focus:outline-none focus:bg-gray-700"
+                >
+                    <option value="">Year</option>
+                    <option value="2020" selected?={ year == 2020 }>2020</option>
+                    <option value="2021" selected?={ year == 2021 }>2021</option>
+                    <option value="2022" selected?={ year == 2022 }>2022</option>
+                    <option value="2023" selected?={ year == 2023 }>2023</option>
+                    <option value="2024" selected?={ year == 2024 }>2024</option>
+                </select>
+            </div>
+        </div>
+    </form>
+}

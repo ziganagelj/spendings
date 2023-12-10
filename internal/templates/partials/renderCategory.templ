@@ -1,0 +1,9 @@
+package partials
+
+import (
+	"spendings/internal/domain"
+)
+
+templ RenderCategory(category domain.Category, selected bool) {
+    <option value={ string(category) } selected?={ selected }>{ string(category) }</option>
+}

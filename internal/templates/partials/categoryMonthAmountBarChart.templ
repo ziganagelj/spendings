@@ -1,0 +1,74 @@
+package partials
+
+import (
+	"spendings/internal/domain"
+)
+
+script graphBar(aggregate []domain.TransactionAggCategoryMonth) {
+    const categories = [...new Set(aggregate.map(item => item.Category))];
+
+    const months = Array.from({ length: 12 }, (_, i) => i + 1);
+    const backgroundColors = [
+        'rgba(255, 99, 132, 0.2)',  // Red
+        'rgba(54, 162, 235, 0.2)',  // Blue
+        'rgba(255, 206, 86, 0.2)',  // Yellow
+        'rgba(75, 192, 192, 0.2)',  // Green
+        'rgba(153, 102, 255, 0.2)', // Purple
+        'rgba(255, 159, 64, 0.2)',  // Orange
+        'rgba(231, 233, 237, 0.2)', // Light Grey
+        'rgba(255, 99, 255, 0.2)',  // Pink
+        'rgba(99, 255, 132, 0.2)',  // Light Green
+        'rgba(132, 99, 255, 0.2)'   // Light Blue
+    ];
+
+    const borderColors = [
+        'rgba(255, 99, 132, 1)',  // Red
+        'rgba(54, 162, 235, 1)',  // Blue
+        'rgba(255, 206, 86, 1)',  // Yellow
+        'rgba(75, 192, 192, 1)',  // Green
+        'rgba(153, 102, 255, 1)', // Purple
+        'rgba(255, 159, 64, 1)',  // Orange
+        'rgba(231, 233, 237, 1)', // Light Grey
+        'rgba(255, 99, 255, 1)',  // Pink
+        'rgba(99, 255, 132, 1)',  // Light Green
+        'rgba(132, 99, 255, 1)'   // Light Blue
+    ];
+
+    const datasets = categories.map((category, index) => {
+        const categoryData = Array(12).fill(0); // Initialize an array for 12 months with zeros
+        aggregate.forEach(item => {
+            if (item.Category === category) {
+                categoryData[item.Month - 1] = item.Amount; // Assign the amount to the corresponding month
+            }
+        });
+
+        return {
+            label: category,
+            data: categoryData,
+            backgroundColor: backgroundColors[index % backgroundColors.length],
+            borderColor: borderColors[index % borderColors.length],
+            borderWidth: 1
+        };
+    });
+
+    const ctx = document.getElementById('categoryMonthAmountBarChart').getContext('2d');
+    const totalMonthlySpendingChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            datasets: datasets
+        },
+        options: {
+            scales: {
+                x: { stacked: true },
+                y: { stacked: true }
+            }
+        }
+    });
+}
+
+templ CategoryMonthAmountBarChart(aggregate []domain.TransactionAggCategoryMonth) {
+    <body onload={ graphBar(aggregate) }>
+        <canvas id="categoryMonthAmountBarChart"></canvas>
+    </body>
+}

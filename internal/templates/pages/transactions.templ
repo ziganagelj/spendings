@@ -1,0 +1,23 @@
+package pages
+
+import (
+	"spendings/internal/domain"
+	"spendings/internal/templates/partials"
+	"spendings/internal/templates/shared"
+)
+
+templ TransactionsPage(transactions []*domain.Transaction, accounts []*domain.Account, categories []domain.Category, term string, month int, year int) {
+    @shared.Page("Home") {
+        <div class="container mx-auto px-4 py-6">
+            <div class="w-full bg-gray-800 p-6 rounded-lg shadow-lg mb-6">
+                <h2 class="text-2xl font-bold mb-4">Search Transactions</h2>
+                    @partials.SearchTransactions(term, month, year)
+            </div>
+            <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+                <h2 class="text-2xl font-bold mb-4">Recent Expenses</h2>
+                @partials.RenderTransactions(transactions)
+            </div>
+            @partials.AddTransactionForm(accounts, categories)
+        </div>
+    }
+}

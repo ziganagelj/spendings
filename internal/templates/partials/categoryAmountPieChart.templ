@@ -1,0 +1,52 @@
+package partials
+
+import (
+	"spendings/internal/domain"
+)
+
+script graph(aggregate map[domain.Category]float64) {
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const labels = Object.keys(aggregate);
+    const data = Object.values(aggregate);
+
+    if (myChart) {
+        myChart.destroy();
+    }
+
+    myChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Expenses',
+                data: data,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+}
+
+templ CategoryAmountPieChart(aggregate map[domain.Category]float64) {
+    <script>
+          let myChart = null;
+     </script>
+    <body onload={ graph(aggregate) }>
+        <div id="pieChartContainer">
+            <canvas id="myChart"></canvas>
+        </div>
+    </body>
+}

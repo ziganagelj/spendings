@@ -1,0 +1,96 @@
+package partials
+
+import (
+	"spendings/internal/domain"
+)
+
+templ RenderTransaction(transaction *domain.Transaction) {
+    <div class="block py-2 flex w-full items-center bg-gray-700 p-4 rounded-lg shadow-lg draggable">
+        <input type="hidden" name="id" value={ transaction.ID.String() } />
+        <form
+            method="POST"
+            action={ templ.SafeURL("/transactions/"+transaction.ID.String()+"/edit") }
+            hx-target="closest div"
+            hx-swap="outerHTML"
+            class="flex-grow"
+        >
+            <input
+                type="hidden"
+                name="description"
+                value={ transaction.Description }
+                class="font-semibold bg-gray-100"
+            />
+            <input
+                type="hidden"
+                name="description"
+                value={ transaction.AmountString() }
+                step="0.01"
+                min="0"
+                class="font-semibold bg-gray-100"
+            />
+            <span class="font-semibold mr-2">Category: { string(transaction.Category) }</span>
+            <div class="relative inline-block">
+                <span class="cursor-pointer">ℹ️</span>
+                <div class="absolute hidden text-black bg-white p-2 rounded shadow-lg" style="min-width: 200px;">
+                    Account Name: { transaction.Account.Name }<br />
+                    Currency: { string(transaction.Account.Currency) }
+                </div>
+            </div>
+            <span hx-patch={ "/transactions/"+transaction.ID.String() } class="block font-semibold">
+                { transaction.Description } - { transaction.AmountString() }
+            </span>
+            <span hx-patch={ "/transactions/"+transaction.ID.String() } class="block text-gray-400 text-sm w-full block">
+                { transaction.TransactionAtString()}
+            </span>
+            <input
+                type="hidden"
+                name="createdAt"
+                value={ transaction.TransactionAtString() }
+                class="text-gray-400 text-sm w-full bg-gray-100"
+            />
+            <input type="hidden" name="accountId" value={ transaction.AccountID.String() } />
+        </form>
+
+        <form
+            method="GET"
+            action={ templ.SafeURL("/transactions/"+transaction.ID.String()) }
+            class="w-1/10"
+        >
+            <button
+                type="submit"
+                hx-target="closest div"
+                hx-swap="outerHTML"
+                hx-get={ "/transactions/"+transaction.ID.String() }
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded text-sm mr-2"
+            >
+                📝
+            </button>
+        </form>
+
+        <form
+            method="POST"
+            action={ templ.SafeURL("/transactions/"+transaction.ID.String()+"/delete") }
+            class="w-1/10"
+        >
+            <button
+                type="submit"
+                hx-target="closest div"
+                hx-swap="outerHTML"
+                hx-delete={ "/transactions/"+transaction.ID.String() }
+                class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-sm"
+            >
+                ❌
+            </button>
+        </form>
+    </div>
+    <script>
+        document.querySelectorAll('.cursor-pointer').forEach(item => {
+            item.addEventListener('mouseover', () => {
+                item.nextElementSibling.style.display = 'block';
+            });
+            item.addEventListener('mouseout', () => {
+                item.nextElementSibling.style.display = 'none';
+            });
+        });
+    </script>
+}

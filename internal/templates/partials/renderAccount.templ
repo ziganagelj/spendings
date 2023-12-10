@@ -1,0 +1,9 @@
+package partials
+
+import (
+	"spendings/internal/domain"
+)
+
+templ RenderAccount(account *domain.Account) {
+    <option value={ account.ID.String() }>{ account.Name }</option>
+}

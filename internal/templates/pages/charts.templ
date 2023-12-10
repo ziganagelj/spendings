@@ -1,0 +1,27 @@
+package pages
+
+import (
+	"spendings/internal/domain"
+	"spendings/internal/templates/partials"
+	"spendings/internal/templates/shared"
+)
+
+
+templ ChartPage(aggregate []domain.TransactionAggCategoryMonth, term string) {
+	@shared.Page("Data") {
+        <div class="container mx-auto px-4 py-6">
+            <h1 class="text-3xl font-bold mb-6">Spending Insights</h1>
+
+            <div class="grid grid-cols-1 gap-6">
+                <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+                    <h2 class="text-2xl font-bold mb-4">Total Monthly Spending by Category</h2>
+                    @partials.CategoryMonthAmountBarChart(aggregate)
+                </div>
+                <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+                    <h2 class="text-2xl font-bold mb-4">Total Cumulative Monthly Spending by Category</h2>
+                    @partials.CategoryMonthAmountCumulativeBarChart(aggregate)
+                </div>
+            </div>
+        </div>
+    }
+}

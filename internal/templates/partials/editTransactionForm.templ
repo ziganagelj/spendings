@@ -1,0 +1,61 @@
+package partials
+
+import (
+	"spendings/internal/domain"
+)
+
+templ EditTransactionForm(transaction *domain.Transaction, categories []domain.Category) {
+	<div class="block py-2 flex w-full items-center bg-gray-700 p-4 rounded-lg shadow-lg">
+	    <input type="hidden" name="id" value={ transaction.ID.String() } />
+	    <form
+            method="POST"
+            action={ templ.SafeURL("/transactions/"+transaction.ID.String()+"/edit") }
+            hx-target="closest div"
+            hx-swap="outerHTML"
+            hx-patch={ "/transactions/"+transaction.ID.String() }
+            class="flex-grow"
+        >
+            <input
+                type="text"
+                name="description"
+                value={ transaction.Description }
+                class="font-semibold bg-gray-700"
+            />
+            <select name="category" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm text-black">
+                for _, category := range categories {
+                    @RenderCategory(category, transaction.Category == category)
+                }
+            </select>
+            <input
+                type="number"
+                name="amount"
+                value={ transaction.AmountString() }
+                step="0.01"
+                min="0"
+                class="font-semibold bg-gray-700"
+            />
+            <input
+                type="date"
+                name="transactionAt"
+                value={ transaction.TransactionAtString() }
+                class="text-sm w-full bg-gray-700"
+            />
+            <input type="hidden" name="accountId" value={ transaction.AccountID.String() } />
+            <input type="submit" class="hidden"/>
+        </form>
+
+        <button
+            disabled="disabled"
+            class="bg-blue-500 text-white font-bold py-1 px-2 rounded text-sm mr-2"
+        >
+            📝
+        </button>
+
+        <button
+            disabled="disabled"
+            class="bg-red-500 text-white font-bold py-1 px-2 rounded text-sm"
+        >
+            ❌
+        </button>
+    </div>
+}
